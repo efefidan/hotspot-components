@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import UserStats from "@/components/UserStats";
 import StatisticChart from "@/components/StatisticChart";
 import LicenseExpireList from "@/components/LicenseExpireList";
+import ConnectionDetailsTable from "@/components/ConnectionDetailsTable";
+import ConnectionTable from "@/components/ConnectionTable";
 
 const HomePage = () => {
   const [memoryUsage, setMemoryUsage] = useState(65);
@@ -29,9 +31,11 @@ const HomePage = () => {
           <LicenseExpireList />
         </div>
       </div>
+      <div>
+        <ConnectionDetailsTable/>
+      </div>
     </div>
   );
-  {/* Sağ tarafta LicenseExpireList */ }
 };
 
 export default HomePage;

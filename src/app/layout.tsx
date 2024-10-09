@@ -1,6 +1,9 @@
+"use client";
+import { useState } from "react";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
 import localFont from "next/font/local";
 import "./globals.css";
-import MainLayout from "../components/MainLayout"; // MainLayout componentini buraya import ediyoruz
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,14 +21,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <MainLayout> {/* MainLayout burada çağırılıyor */}
-          {children} {/* Diğer bileşenler MainLayout içinde */}
-        </MainLayout>
+        <div className="flex h-screen">
+          {/* Sidebar'ın tamamen gizlenmesi */}
+          <div className={`${isSidebarOpen ? "block" : "hidden"}`}>
+            <Sidebar isOpen={isSidebarOpen} />
+          </div>
+          <div className="flex-1">
+            <Header toggleSidebar={toggleSidebar} />
+            <div>{children}</div>
+          </div>
+        </div>
       </body>
     </html>
   );
