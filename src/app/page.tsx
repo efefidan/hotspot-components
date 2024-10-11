@@ -5,6 +5,7 @@ import StatisticChart from "@/components/StatisticChart";
 import LicenseExpireList from "@/components/LicenseExpireList";
 import ConnectionDetailsTable from "@/components/ConnectionDetailsTable";
 import ConnectionTable from "@/components/ConnectionTable";
+import CurrentLogsTable from "@/components/CurrentLogsTable";
 
 const HomePage = () => {
   const [memoryUsage, setMemoryUsage] = useState(65);
@@ -33,6 +34,9 @@ const HomePage = () => {
       </div>
       <div>
         <ConnectionDetailsTable/>
+      </div>
+      <div>
+        <CurrentLogsTable/>
       </div>
     </div>
   );

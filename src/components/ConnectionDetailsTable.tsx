@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaEllipsisV } from "react-icons/fa";
 
 interface ConnectionData {
   room: string;
@@ -168,8 +168,8 @@ const ConnectionDetailsTable: React.FC = () => {
                   {item.birthday}
                 </td>
                 <td style={{ padding: "10px", textAlign: "center" }}>
-                  <button style={{ color: "red" }}>
-                    <FaTrash />
+                  <button >
+                    <FaEllipsisV  />
                   </button>
                 </td>
               </tr>
