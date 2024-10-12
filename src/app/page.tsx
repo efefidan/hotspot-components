@@ -6,6 +6,8 @@ import LicenseExpireList from "@/components/LicenseExpireList";
 import ConnectionDetailsTable from "@/components/ConnectionDetailsTable";
 import ConnectionTable from "@/components/ConnectionTable";
 import CurrentLogsTable from "@/components/CurrentLogsTable";
+import GuestTrafficChart from "@/components/GuestTrafficChart";
+import GuestMonitoring from "@/components/GuestMonitoring";
 
 const HomePage = () => {
   const [memoryUsage, setMemoryUsage] = useState(65);
@@ -37,6 +39,10 @@ const HomePage = () => {
       </div>
       <div>
         <CurrentLogsTable/>
+      </div>
+      <div className="p-4">
+        <GuestTrafficChart/>
+        <GuestMonitoring/>
       </div>
     </div>
   );

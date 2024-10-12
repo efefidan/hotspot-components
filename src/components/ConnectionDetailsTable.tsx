@@ -91,7 +91,7 @@ const ConnectionDetailsTable: React.FC = () => {
         <div className="flex items-center">
           <h2 className="text-md font-semibold">Current Connections</h2>
           <div className="bg-blue-200 text-blue-900 px-2 py-1 rounded-md font-bold ml-2">
-            {randomNumber}
+            55
           </div> {/* Random number in blue box */}
         </div>
         <button className="border border-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-100 transition duration-200">
