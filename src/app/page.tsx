@@ -10,6 +10,7 @@ import GuestTrafficChart from "@/components/GuestTrafficChart";
 import GuestMonitoring from "@/components/GuestMonitoring";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import HotelStats from "@/components/HotelStats";
 
 const HomePage = () => {
   const [memoryUsage, setMemoryUsage] = useState(65);
@@ -40,7 +41,7 @@ const HomePage = () => {
         {/* Asıl içerik */}
         <div className="container mx-auto p-4">
           <UserStats /> {/* Kullanıcı istatistiklerini gösteren kısım */}
-
+          <HotelStats/>
           {/* Flexbox ile layout'u responsive yapıyoruz */}
           <div className="flex flex-col lg:flex-row justify-between space-y-4 lg:space-y-0 lg:space-x-4">
             {/* Sol tarafta StatisticChart */}
@@ -62,7 +63,6 @@ const HomePage = () => {
           </div>
           <div className="flex flex-wrap space-x-4">
             <GuestTrafficChart />
-            <GuestMonitoring />
           </div>
         </div>
       </div>
