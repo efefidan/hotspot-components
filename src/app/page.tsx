@@ -11,6 +11,7 @@ import GuestMonitoring from "@/components/GuestMonitoring";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import HotelStats from "@/components/HotelStats";
+import UserStats2 from "@/components/UserStats2";
 
 const HomePage = () => {
   const [memoryUsage, setMemoryUsage] = useState(65);
@@ -64,6 +65,7 @@ const HomePage = () => {
           <div className="flex flex-wrap space-x-4">
             <GuestTrafficChart />
           </div>
+          <UserStats2/>
         </div>
       </div>
     </div>
