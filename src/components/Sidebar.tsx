@@ -1,10 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FiChevronDown, FiChevronRight, FiSearch } from "react-icons/fi";
 import Image from "next/image";
 
 // SidebarItem bileşeni. Açık olup olmadığını kontrol eden isActive prop'u alıyor.
-const SidebarItem = ({ title, dropdown, items, icon, isActive, onClick }: any) => {
+const SidebarItem = ({
+  title,
+  dropdown,
+  items,
+  icon,
+  isActive,
+  onClick,
+}: any) => {
   return (
     <div>
       <div
@@ -41,8 +48,33 @@ const SidebarItem = ({ title, dropdown, items, icon, isActive, onClick }: any) =
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
   // Sadece bir item'in açık kalması için activeIndex kullanıyoruz
-  const [activeIndex, setActiveIndex] = useState<number | null>(null); 
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isCompanyOpen, setIsCompanyOpen] = useState(false); // For company dropdown
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const languageDropdownRef = useRef(null); // Reference for the dropdown
+
+  // Toggle language dropdown when clicking on English
+  const toggleLanguageDropdown = () => {
+    setIsLanguageDropdownOpen(!isLanguageDropdownOpen);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target)) {
+        setIsLanguageDropdownOpen(false); // Close dropdown if clicked outside
+      }
+    };
+
+    // Add event listener
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup event listener
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [languageDropdownRef]);
+ 
 
   const handleItemClick = (index: number) => {
     // Eğer aynı item tekrar tıklanmışsa, kapatıyoruz.
@@ -61,7 +93,14 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
       style={{ width: "256px", height: "725px" }} // Sidebar 256x1022 boyutlarına ayarlandı
     >
       {/* MSE Teknoloji Logosu */}
-      <div style={{ width: "200px", height: "100px", position: "absolute", top: "20px" }}>
+      <div
+        style={{
+          width: "200px",
+          height: "100px",
+          position: "absolute",
+          top: "20px",
+        }}
+      >
         <Image
           src="/büyüklogo.svg"
           alt="MSE Teknoloji"
@@ -74,7 +113,12 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
       {/* Company Section */}
       <div
         onClick={() => setIsCompanyOpen(!isCompanyOpen)}
-        style={{ width: "200px", height: "60px", position: "absolute", top: "80px" }}
+        style={{
+          width: "200px",
+          height: "60px",
+          position: "absolute",
+          top: "80px",
+        }}
         className="flex justify-between items-center cursor-pointer p-2 rounded-lg transition-colors duration-300 text-gray-500 hover:text-black hover:bg-gray-200 hover:shadow-lg hover:opacity-100"
       >
         <div className="flex items-center space-x-2">
@@ -105,7 +149,13 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
       {/* Search Section */}
       <div
         className="flex items-center bg-white border border-gray-300 rounded-lg p-1"
-        style={{ width: "222px", height: "38px", position: "absolute", left: "17px", top: "150px" }}
+        style={{
+          width: "222px",
+          height: "38px",
+          position: "absolute",
+          left: "17px",
+          top: "150px",
+        }}
       >
         <FiSearch className="text-gray-500" />
         {isOpen && (
@@ -119,7 +169,13 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
       {/* Menü Öğeleri */}
       <ul
         className="flex-1 overflow-auto"
-        style={{ width: "223px", height: "314px", position: "absolute", left: "17px", top: "200px" }}
+        style={{
+          width: "223px",
+          height: "314px",
+          position: "absolute",
+          left: "17px",
+          top: "200px",
+        }}
       >
         <SidebarItem
           title="Dashboard"
@@ -189,23 +245,55 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
         }}
       >
         <div className="flex items-center space-x-2 text-gray-500 hover:text-black hover:bg-gray-200 hover:shadow-lg hover:opacity-100 transition-all duration-300 cursor-pointer border border-transparent rounded-lg p-2">
-          <img src="/Vectorsupport.svg" alt="Support Icon" className="w-6 h-6" />
+          <img
+            src="/Vectorsupport.svg"
+            alt="Support Icon"
+            className="w-6 h-6"
+          />
           {isOpen && <span>Support</span>}
         </div>
-        <div className="flex items-center space-x-2 text-gray-500 hover:text-black hover:bg-gray-200 hover:shadow-lg hover:opacity-100 transition-all duration-300 cursor-pointer border border-transparent rounded-lg p-2">
-          <img src="/Vectorenglish.svg" alt="Language Icon" className="w-6 h-6" />
-          {isOpen && <span>English</span>}
+
+        {/* Language Dropdown */}
+      <div
+        className="relative flex items-center space-x-2 text-gray-500 hover:text-black hover:bg-gray-200 hover:shadow-lg hover:opacity-100 transition-all duration-300 cursor-pointer border border-transparent rounded-lg p-2"
+        onClick={toggleLanguageDropdown}
+      >
+        <img src="/Vectorenglish.svg" alt="Language Icon" className="w-6 h-6" />
+        {isOpen && <span>English</span>}
+      </div>
+
+      {/* Dropdown Content */}
+      {isLanguageDropdownOpen && (
+        <div
+          className="absolute top-0 left-48 bg-white border border-gray-300 shadow-lg rounded-lg p-4"
+          ref={languageDropdownRef} // Reference for the dropdown
+        >
+          <ul className="text-gray-700">
+            <li className="hover:bg-gray-100 p-2 rounded-lg cursor-pointer">English</li>
+            <li className="hover:bg-gray-100 p-2 rounded-lg cursor-pointer">Turkish</li>
+            <li className="hover:bg-gray-100 p-2 rounded-lg cursor-pointer">German</li>
+          </ul>
         </div>
+      )}
+
         <div className="flex items-center space-x-2 text-gray-300">
-          <img src="/Vectorversion.svg" alt="Version Icon" className="w-6 h-6" />
+          <img
+            src="/Vectorversion.svg"
+            alt="Version Icon"
+            className="w-6 h-6"
+          />
           {isOpen && <span>v12.5.23</span>}
         </div>
       </div>
-
       {/* Kullanıcı Profili Kısmı */}
       <div
         className="flex items-center space-x-2"
-        style={{ width: "256px", height: "66px", position: "absolute", top: "670px" }}
+        style={{
+          width: "256px",
+          height: "66px",
+          position: "absolute",
+          top: "670px",
+        }}
       >
         <img src="/profil.svg" alt="Profile Icon" className="w-8 h-8" />
         {isOpen && (
