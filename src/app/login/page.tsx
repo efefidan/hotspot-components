@@ -1,10 +1,12 @@
 "use client"
 import Image from 'next/image';
 import { useState } from 'react';
+import Header from '@/components/Header';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
 
   return (
     <div className="flex min-h-screen w-screen bg-[#F0F4FF]">

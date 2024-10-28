@@ -136,7 +136,7 @@ const GuestTrafficChart = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md flex flex-col md:flex-row items-center md:justify-between border border-gray-200">
-      <div className="w-full md:w-3/4">
+      <div className="w-full  md:w-3/4">
         <div className="flex items-center mb-4">
           <h2 className="text-lg font-semibold px-2">Guest Traffic</h2>
           <select
@@ -151,7 +151,7 @@ const GuestTrafficChart = () => {
         </div>
         <Line data={getData()} options={options} />
       </div>
-      <div className="w-full md:w-1/4 flex flex-col space-y-4 mt-4 md:mt-0">
+      <div className="w-full md:w-1/4 flex flex-col space-y-4 mt-4 md:mt-0 ">
         <InfoCard icon={<FaDownload />} label="Download" value={`${getAverage(getData().datasets[0].data as number[])} mbps`} percentage="9.2%" />
         <InfoCard icon={<FaUpload />} label="Upload" value={`${getAverage(getData().datasets[1].data as number[])} mbps`} percentage="9.2%" />
         <InfoCard icon={<FaMicrochip />} label="Processor" value="63.3 mbps" percentage="9.2%" />
