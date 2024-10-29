@@ -16,13 +16,28 @@ import UserStats2 from "@/components/UserStats2";
 const HomePage = () => {
   const [memoryUsage, setMemoryUsage] = useState(65);
   const [diskUsage, setDiskUsage] = useState(75);
-
-  useEffect(() => {
-    // Burada bir backend ya da database API'sinden veri çekebilirsin.
-    // setMemoryUsage ile dinamik veri güncellemesi yapılabilir.
-  }, []);
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  // Örnek veri setleri
+  const userStatsData = [
+    { Total: 182, Today: 50, LastWeek: 120, LastMonth: 140 },
+    // Diğer veriler...
+  ];
+
+  const userInformationData = [
+    { ageGroup: "18-24", value: 9200 },
+    // Diğer veriler...
+  ];
+
+  const connectionDetailsData = [
+    { room: "1010", ipAddress: "170.20.12.189", macAddress: "AC:92:32:C1:18:04" },
+    // Diğer veriler...
+  ];
+
+  const currentLogsData = [
+    { hotelName: "Akra Hotel", logName: "All Customer Logs", date: "27.09.2024 - 10:30" },
+    // Diğer veriler...
+  ];
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -30,27 +45,28 @@ const HomePage = () => {
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <div className={`${isSidebarOpen ? "block" : "hidden"}`}>
         <Sidebar isOpen={isSidebarOpen} />
       </div>
-      
-      {/* Main Content */}
-      <div className="flex-1">
-        <Header toggleSidebar={toggleSidebar} />
 
-        {/* Asıl içerik */}
+      <div className="flex-1">
+        <Header
+          toggleSidebar={toggleSidebar}
+          userStatsData={userStatsData}
+          userInformationData={userInformationData}
+          connectionDetailsData={connectionDetailsData}
+          currentLogsData={currentLogsData}
+        />
+
         <div className="container mx-auto p-4">
-          <UserStats /> {/* Kullanıcı istatistiklerini gösteren kısım */}
-          <HotelStats/>
-          {/* Flexbox ile layout'u responsive yapıyoruz */}
+          <UserStats />
+          <HotelStats />
+
           <div className="flex flex-col lg:flex-row justify-between space-y-4 lg:space-y-0 lg:space-x-4">
-            {/* Sol tarafta StatisticChart */}
             <div className="w-full lg:w-3/4">
               <StatisticChart />
             </div>
 
-            {/* Sağ tarafta LicenseExpireList */}
             <div className="w-full lg:w-1/4">
               <LicenseExpireList />
             </div>
@@ -65,7 +81,7 @@ const HomePage = () => {
           <div className="flex flex-wrap space-x-4">
             <GuestTrafficChart />
           </div>
-          <UserStats2/>
+          <UserStats2 />
         </div>
       </div>
     </div>
