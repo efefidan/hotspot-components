@@ -9,6 +9,12 @@ const Header = ({
   userInformationData,
   connectionDetailsData,
   currentLogsData,
+}: {
+  toggleSidebar: () => void;
+  userStatsData: any;
+  userInformationData: any;
+  connectionDetailsData: any;
+  currentLogsData: any;
 }) => {
   const [notifications, setNotifications] = useState([
     { id: 1, message: "New user signed up", read: false },
