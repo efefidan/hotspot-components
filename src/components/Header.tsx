@@ -11,6 +11,12 @@ const Header = ({
   userInformationData,
   connectionDetailsData,
   currentLogsData,
+}: {
+  toggleSidebar: () => void;
+  userStatsData: any;
+  userInformationData: any;
+  connectionDetailsData: any;
+  currentLogsData: any;
 }) => {
   const { language } = useLanguage();
   const content = translations[language] || translations["en"]; // Dil seçimi

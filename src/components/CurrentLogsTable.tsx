@@ -75,7 +75,7 @@ const CurrentLogsTable: React.FC = () => {
 const [originalData, setOriginalData] = useState<LogData[]>(initialData); // Güncellenmiş sıralama sonrası geri dönülecek orijinal veri seti.
 
 
-const handleSort = (key: string) => {
+const handleSort = (key: keyof LogData) => {
   let direction = "ascending";
   if (sortConfig && sortConfig.key === key) {
       if (sortConfig.direction === "ascending") {
@@ -94,7 +94,7 @@ const handleSort = (key: string) => {
   }
 
   const sortedData = [...data].sort((a, b) => {
-      if (key === "date" || key === "birthday") {
+      if (key === "date") {
           const dateA = new Date(a[key]);
           const dateB = new Date(b[key]);
           return direction === "ascending"
@@ -195,7 +195,7 @@ const handleEdit = (item: LogData) => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                   }}
-                  onClick={() => handleSort(field)}
+                  onClick={() => handleSort(field as keyof LogData)}
                 >
                   <div className="flex items-center">
                     {label} {renderSortIcon(field)}

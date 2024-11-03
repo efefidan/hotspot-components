@@ -90,7 +90,7 @@ const ConnectionDetailsTable: React.FC = () => {
 
 const [originalData, setOriginalData] = useState<ConnectionData[]>(initialData); // Güncellenmiş sıralama sonrası geri dönülecek orijinal veri seti.
 
-const handleSort = (key: string) => {
+const handleSort = (key: keyof ConnectionData) => {
     let direction = "ascending";
     if (sortConfig && sortConfig.key === key) {
         if (sortConfig.direction === "ascending") {
@@ -205,7 +205,7 @@ const handleSave = () => {
                     padding: "10px",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleSort(field)}
+                  onClick={() => handleSort(field as keyof ConnectionData)}
                 >
                   <div className="flex items-center">
                     {label} {renderSortIcon(field)}
