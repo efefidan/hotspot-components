@@ -12,11 +12,15 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import HotelStats from "@/components/HotelStats";
 import UserStats2 from "@/components/UserStats2";
+import { useLanguage } from "@/contexts/LanguageContext";
+
 
 const HomePage = () => {
   const [memoryUsage, setMemoryUsage] = useState(65);
   const [diskUsage, setDiskUsage] = useState(75);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { language } = useLanguage();
+
 
   // Örnek veri setleri
   const userStatsData = [

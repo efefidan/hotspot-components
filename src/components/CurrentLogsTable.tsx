@@ -8,6 +8,8 @@ import {
   FaSortUp,
   FaSortDown,
 } from "react-icons/fa";
+import { useLanguage } from "@/contexts/LanguageContext"; // Dil hook'u
+import translations from "@/locales/translations"; // Çevirileri ekle
 
 interface LogData {
   id: string;
@@ -17,6 +19,9 @@ interface LogData {
 }
 
 const CurrentLogsTable: React.FC = () => {
+  const { language } = useLanguage();
+  const content = translations[language]?.currentLogsTable || translations["en"].currentLogsTable;
+
   const initialData: LogData[] = [
     {
       id: "1011",
@@ -156,14 +161,13 @@ const handleEdit = (item: LogData) => {
     <div className="mt-8 p-4 bg-white shadow-md rounded-lg border border-gray-200">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
-          <h2 className="text-md font-semibold">Current Logs</h2>
+          <h2 className="text-md font-semibold">{content.title}</h2>
           <div className="bg-blue-200 text-blue-900 px-2 py-1 rounded-md font-bold ml-2">
             {randomNumber}
-          </div>{" "}
-          {/* Random number in blue box */}
+          </div>
         </div>
         <button className="border border-gray-300 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-100 transition duration-200">
-          See All Connections
+          {content.seeAll}
         </button>
       </div>
       <div style={{ overflowX: "auto", width: "100%" }}>
@@ -175,17 +179,11 @@ const handleEdit = (item: LogData) => {
           }}
         >
           <thead>
-            <tr
-              className="bg-gray-100 text-gray-500"
-              style={{
-                fontSize: "14px",
-                textAlign: "left",
-              }}
-            >
+            <tr className="bg-gray-100 text-gray-500" style={{ fontSize: "14px", textAlign: "left" }}>
               {[
-                { label: "Hotel Name", field: "hotelName" },
-                { label: "Log Name", field: "logName" },
-                { label: "Date", field: "date" },
+                { label: content.hotelName, field: "hotelName" },
+                { label: content.logName, field: "logName" },
+                { label: content.date, field: "date" },
               ].map(({ label, field }) => (
                 <th
                   key={field}
@@ -204,16 +202,12 @@ const handleEdit = (item: LogData) => {
                   </div>
                 </th>
               ))}
-              <th style={{ padding: "10px", textAlign: "center" }}>Actions</th>
+              <th style={{ padding: "10px", textAlign: "center" }}>{content.actions}</th>
             </tr>
           </thead>
           <tbody className="text-gray-500">
             {data.map((item, index) => (
-              <tr
-                key={index}
-                className="hover:bg-gray-100 transition duration-150"
-                style={{ borderBottom: "1px solid #e2e8f0" }}
-              >
+              <tr key={index} className="hover:bg-gray-100 transition duration-150" style={{ borderBottom: "1px solid #e2e8f0" }}>
                 <td style={{ padding: "10px", width: columnWidths.hotelName }}>
                   {item.hotelName}
                 </td>
@@ -221,24 +215,14 @@ const handleEdit = (item: LogData) => {
                   {item.logName}
                 </td>
                 <td style={{ padding: "10px", width: columnWidths.date }}>
-                {new Date(item.date).toLocaleDateString("tr-TR") +
-                    " - " +
-                    new Date(item.date).toLocaleTimeString("tr-TR", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}                </td>
+                  {new Date(item.date).toLocaleDateString(language) + " - " + new Date(item.date).toLocaleTimeString(language, { hour: "2-digit", minute: "2-digit" })}
+                </td>
                 <td style={{ padding: "10px", textAlign: "center" }}>
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="text-blue-500 mr-2"
-                  >
-                    <FaEdit />
+                  <button onClick={() => handleEdit(item)} className="text-blue-500 mr-2">
+                    <FaEdit /> 
                   </button>
-                  <button
-                    onClick={() => handleDelete(index)}
-                    className="text-red-500"
-                  >
-                    <FaTrash />
+                  <button onClick={() => handleDelete(index)} className="text-red-500">
+                    <FaTrash /> 
                   </button>
                 </td>
               </tr>
@@ -246,15 +230,14 @@ const handleEdit = (item: LogData) => {
           </tbody>
         </table>
       </div>
-      {/* Düzenleme Modalı */}
       {isEditModalOpen && selectedItem && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white p-4 rounded shadow-lg">
-            <h2 className="text-xl mb-4">Edit Connection Details</h2>
+            <h2 className="text-xl mb-4">{content.editTitle}</h2>
             <div className="space-y-2">
               {Object.keys(selectedItem).map((field) => (
                 <div key={field}>
-                  <label className="block text-gray-700">{field}</label>
+                  <label className="block text-gray-700">{content[field] || field}</label>
                   <input
                     type="text"
                     value={selectedItem[field as keyof LogData]}
@@ -270,17 +253,11 @@ const handleEdit = (item: LogData) => {
               ))}
             </div>
             <div className="mt-4 flex justify-end space-x-2">
-              <button
-                onClick={() => setIsEditModalOpen(false)}
-                className="px-4 py-2 bg-gray-300 rounded"
-              >
-                Cancel
+              <button onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 bg-gray-300 rounded">
+                {content.cancel}
               </button>
-              <button
-                onClick={handleSave}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                Save
+              <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded">
+                {content.save}
               </button>
             </div>
           </div>

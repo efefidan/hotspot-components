@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { FiMenu, FiBell } from "react-icons/fi";
 import { FaArrowUp, FaArrowDown, FaEllipsisV } from "react-icons/fa";
+import { useLanguage } from "@/contexts/LanguageContext"; // Dil hook'unu ekle
+import translations from "@/locales/translations"; // Çevirileri ekle
 
 const Header = ({
   toggleSidebar,
@@ -10,6 +12,8 @@ const Header = ({
   connectionDetailsData,
   currentLogsData,
 }) => {
+  const { language } = useLanguage();
+  const content = translations[language] || translations["en"]; // Dil seçimi
   const [notifications, setNotifications] = useState([
     { id: 1, message: "New user signed up", read: false },
     { id: 2, message: "Server restarted", read: true },
@@ -65,7 +69,9 @@ const Header = ({
           <div className="cursor-pointer" onClick={toggleSidebar}>
             <FiMenu className="text-xl" />
           </div>
-          <span className="text-sm font-semibold">Dashboard</span>
+          <span className="text-sm font-semibold">
+            {content.header.dashboard}
+          </span>
         </div>
         {/* Bildirimler */}
         <div className="flex items-center space-x-4 relative">
@@ -74,7 +80,9 @@ const Header = ({
             onClick={() => setIsNotificationOpen(!isNotificationOpen)}
           >
             <FiBell className="text-xl" />
-            <span className="text-sm font-medium">Notification</span>
+            <span className="text-sm font-medium">
+              {content.header.notification}
+            </span>
             <span className="bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded-md">
               {unreadCount}
             </span>
@@ -83,7 +91,9 @@ const Header = ({
           {/* Bildirim Açılır Menüsü */}
           {isNotificationOpen && (
             <div className="absolute top-12 right-0 w-72 bg-white shadow-lg rounded-md p-4 z-10">
-              <h4 className="font-semibold mb-2">Notifications</h4>
+              <h4 className="font-semibold mb-2">
+                {content.header.notificationsTitle}
+              </h4>
               {notifications.length > 0 ? (
                 notifications.map((notif) => (
                   <div
@@ -102,19 +112,23 @@ const Header = ({
                         onClick={() => toggleReadStatus(notif.id)}
                         className="text-xs text-blue-500"
                       >
-                        {notif.read ? "Unread" : "Read"}
+                        {notif.read
+                          ? content.header.unread
+                          : content.header.read}
                       </button>
                       <button
                         onClick={() => handleDelete(notif.id)}
                         className="text-xs text-red-500"
                       >
-                        Delete
+                        {content.header.delete}
                       </button>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-gray-500">No notifications</p>
+                <p className="text-sm text-gray-500">
+                  {content.header.noNotifications}
+                </p>
               )}
             </div>
           )}
@@ -124,15 +138,15 @@ const Header = ({
       {/* Alt Sıra */}
       <div className="flex justify-between items-center p-4">
         <div>
-          <h1 className="text-2xl font-bold">Welcome Murat,</h1>
-          <p className="text-gray-500">You can display all updates here</p>
-          <p className="text-sm text-gray-400">Last Update: 26.09.2024</p>
+          <h1 className="text-2xl font-bold">{content.header.welcome}</h1>
+          <p className="text-gray-500">{content.header.updatesMessage}</p>
+          <p className="text-sm text-gray-400">{content.header.lastUpdate}</p>
         </div>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-lg"
           onClick={() => setIsModalOpen(true)} // Modal açma
         >
-          Export Data
+          {content.header.exportData}
         </button>
       </div>
 
@@ -140,61 +154,64 @@ const Header = ({
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20">
           <div className="bg-white w-96 p-6 rounded-lg shadow-lg relative">
-            <h2 className="text-xl font-bold mb-4">Export Data</h2>
+            <h2 className="text-xl font-bold mb-4">
+              {content.header.modalTitle}
+            </h2>
             <div className="space-y-4">
               {/* Her bir veri kategorisi için indirme seçenekleri */}
               <div className="flex justify-between items-center border-b pb-2">
-                <span>User Stats</span>
+                <span>{content.header.userStats}</span>
                 <button
                   onClick={() => downloadCSVData(userStatsData, "user_stats")}
                   className="text-blue-500 hover:text-blue-700 text-sm"
                 >
-                  Download
+                  {content.header.download}
                 </button>
               </div>
               <div className="flex justify-between items-center border-b pb-2">
-                <span>User Information Chart</span>
+                <span>{content.header.userInformationChart}</span>
                 <button
                   onClick={() =>
                     downloadCSVData(userInformationData, "user_information_chart")
                   }
                   className="text-blue-500 hover:text-blue-700 text-sm"
                 >
-                  Download
+                  {content.header.download}
                 </button>
               </div>
               <div className="flex justify-between items-center border-b pb-2">
-                <span>Connections Detail</span>
+                <span>{content.header.connectionsDetail}</span>
                 <button
                   onClick={() =>
                     downloadCSVData(connectionDetailsData, "connections_detail")
                   }
                   className="text-blue-500 hover:text-blue-700 text-sm"
                 >
-                  Download
+                  {content.header.download}
                 </button>
               </div>
               <div className="flex justify-between items-center border-b pb-2">
-                <span>Current Logs</span>
+                <span>{content.header.currentLogs}</span>
                 <button
                   onClick={() => downloadCSVData(currentLogsData, "current_logs")}
                   className="text-blue-500 hover:text-blue-700 text-sm"
                 >
-                  Download
-                  </button>
-                </div>
+                  {content.header.download}
+                </button>
               </div>
-              <button
-                className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
-                onClick={() => setIsModalOpen(false)} // Modal kapama
-              >
-                X
-              </button>
             </div>
+            <button
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+              onClick={() => setIsModalOpen(false)} // Modal kapama
+            >
+              X
+            </button>
           </div>
-        )}
-      </div>
-    );
-  };
+        </div>
+      )}
+    </div>
+  );
+};
+
 
 export default Header;

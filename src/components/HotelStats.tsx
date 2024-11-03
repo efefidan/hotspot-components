@@ -1,24 +1,29 @@
 import { FiMoreVertical, FiHome, FiUserCheck, FiBarChart2 } from "react-icons/fi";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext"; // Dil hook'u
+import translations from "@/locales/translations"; // Çevirileri ekle
+
 
 const HotelStats = () => {
+  const { language } = useLanguage();
+  const content = translations[language] || translations["en"]; // Dil seçimi
   const [selectedRange, setSelectedRange] = useState("Total");
 
   const stats = [
     {
-      title: "Total Hotel",
+      title: content.hotelStats.totalHotel,
       value: 12,
       change: "9.2%",
       increase: true,
-      icon: <FiHome className="text-2xl text-gray-500" />, // Ev simgesi
+      icon: <FiHome className="text-2xl text-gray-500" />,
     },
     {
-      title: "Active Guest",
+      title: content.hotelStats.activeGuest,
       value: 8340,
       change: "9.2%",
       increase: false,
-      icon: <FiUserCheck className="text-2xl text-gray-500" />, // Kullanıcı onay simgesi
+      icon: <FiUserCheck className="text-2xl text-gray-500" />,
     },
   ];
 
@@ -30,7 +35,7 @@ const HotelStats = () => {
   ];
 
   return (
-    <div className="py-2 flex justify-between space-x-4 w-full"> {/* Flex yapısı ve tam genişlik */}
+    <div className="py-2 flex justify-between space-x-4 w-full">
       {/* Stats Cards */}
       <div className="flex-1 flex space-x-4">
         {stats.map((stat, index) => (
@@ -47,7 +52,7 @@ const HotelStats = () => {
               <FiMoreVertical className="text-gray-500" />
             </div>
 
-            {/* Stats Value and Change - Alt kısımda */}
+            {/* Stats Value and Change */}
             <div className="flex justify-between items-center mt-4">
               <h2 className="text-2xl font-bold" style={{ color: "#323C4D" }}>
                 {stat.value.toLocaleString()}
@@ -72,13 +77,13 @@ const HotelStats = () => {
       </div>
 
       {/* Hotel Activity Rank */}
-      <div
-        className="flex-1 bg-white p-4 rounded-lg shadow-sm border border-gray-200 w-full" // Flex yapısı ve genişlik ayarı
-      >
+      <div className="flex-1 bg-white p-4 rounded-lg shadow-sm border border-gray-200 w-full">
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center space-x-2">
-            <FiBarChart2 className="text-2xl text-gray-500" /> {/* Aktivite simgesi */}
-            <span className="text-gray-500 font-semibold">Hotel Activity Rank</span>
+            <FiBarChart2 className="text-2xl text-gray-500" />
+            <span className="text-gray-500 font-semibold">
+              {content.hotelStats.hotelActivityRank}
+            </span>
           </div>
           <FiMoreVertical className="text-gray-500" />
         </div>
@@ -87,14 +92,14 @@ const HotelStats = () => {
           {hotelRank.map((hotel, index) => (
             <div key={index} className="flex items-center mb-2 mr-3">
               <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                <span className="text-sm font-semibold">H</span> {/* Otel simgesi */}
+                <span className="text-sm font-semibold">H</span>
               </div>
               <div className="ml-2">
                 <h3 className="text-sm font-semibold text-gray-700">
                   {hotel.name}
                 </h3>
                 <p className="text-xs text-gray-500">
-                  {hotel.activeGuests} Active
+                  {hotel.activeGuests} {content.hotelStats.active}
                 </p>
               </div>
             </div>

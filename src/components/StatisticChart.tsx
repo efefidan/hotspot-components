@@ -1,7 +1,9 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, Key } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { useLanguage } from "@/contexts/LanguageContext"; // Dil hook'u
+import translations from "@/locales/translations"; // Çevirileri ekle
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -140,6 +142,8 @@ const options = {
 };
 
 export default function Dashboard() {
+  const { language } = useLanguage();
+  const content = translations[language] || translations["en"];
   const [activeTab, setActiveTab] = useState("age");
   const chartRef = useRef(null); // Chart.js referansı
   const [hiddenStates, setHiddenStates] = useState({
@@ -164,11 +168,47 @@ export default function Dashboard() {
   const renderChartData = () => {
     switch (activeTab) {
       case "age":
-        return ageData;
+        return {
+          labels: content.dashboard.ageRanges.map((range: any, i: string | number) => `${range} (${ageValues[i]})`),
+          datasets: [
+            {
+              label: content.dashboard.ageStatistic,
+              data: ageValues,
+              backgroundColor: ageValues.map((value) =>
+                getColorByValue(value, ageMinValue, ageMaxValue)
+              ),
+              borderWidth: 1,
+            },
+          ],
+        };
       case "devices":
-        return devicesData;
+        return {
+          labels: content.dashboard.devices.map((device: any, i: string | number) => `${device} (${devicesValues[i]})`),
+          datasets: [
+            {
+              label: content.dashboard.devicesStatistic,
+              data: devicesValues,
+              backgroundColor: devicesValues.map((value) =>
+                getColorByValue(value, devicesMinValue, devicesMaxValue)
+              ),
+              borderWidth: 1,
+            },
+          ],
+        };
       case "browser":
-        return browserData;
+        return {
+          labels: content.dashboard.browsers.map((browser: any, i: string | number) => `${browser} (${browserValues[i]})`),
+          datasets: [
+            {
+              label: content.dashboard.browserStatistic,
+              data: browserValues,
+              backgroundColor: browserValues.map((value) =>
+                getColorByValue(value, browserMinValue, browserMaxValue)
+              ),
+              borderWidth: 1,
+            },
+          ],
+        };
       default:
         return ageData;
     }
@@ -177,19 +217,19 @@ export default function Dashboard() {
   const renderChartTitle = () => {
     switch (activeTab) {
       case "age":
-        return "Age Statistic";
+        return content.dashboard.ageStatistic;
       case "devices":
-        return "Devices Statistic";
+        return content.dashboard.devicesStatistic;
       case "browser":
-        return "Web Browser Statistic";
+        return content.dashboard.browserStatistic;
       default:
-        return "Age Statistic";
+        return content.dashboard.ageStatistic;
     }
   };
 
   const renderLabels = () => {
     const currentData = renderChartData();
-    return currentData.labels.map((label, index) => (
+    return currentData.labels.map((label: string, index: Key | null | undefined) => (
       <li
         key={index}
         className={`flex items-center justify-between text-lg cursor-pointer ${
@@ -215,12 +255,10 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-4 bg-white rounded-lg shadow-md">
-      {/* Üst kısımda logo, başlık ve ayar butonu */}
       <div className="flex justify-between w-full items-center mb-4">
         <div className="flex items-center">
-          <img src="/logo.png" alt="Logo" className="w-8 h-8 mr-2" />{" "}
-          {/* Logo */}
-          <h1 className="text-l font-bold">User Information Chart</h1>
+          <img src="/logo.png" alt="Logo" className="w-8 h-8 mr-2" />
+          <h1 className="text-l font-bold">{content.dashboard.title}</h1>
         </div>
         <div>
           <button className="text-gray-700">
@@ -237,12 +275,10 @@ export default function Dashboard() {
                 d="M12 6h.01M12 12h.01M12 18h.01"
               />
             </svg>
-          </button>{" "}
-          {/* Ayarlar butonu */}
+          </button>
         </div>
       </div>
 
-      {/* Sekme bölümü */}
       <div className="flex justify-start w-full mb-6">
         <button
           className={`px-4 py-2 text-sm font-semibold ${
@@ -252,7 +288,7 @@ export default function Dashboard() {
           } rounded-l-md`}
           onClick={() => setActiveTab("age")}
         >
-          Age Statistic
+          {content.dashboard.ageStatistic}
         </button>
         <button
           className={`px-4 py-2 text-sm font-semibold ${
@@ -262,7 +298,7 @@ export default function Dashboard() {
           }`}
           onClick={() => setActiveTab("devices")}
         >
-          Devices Statistic
+          {content.dashboard.devicesStatistic}
         </button>
         <button
           className={`px-4 py-2 text-sm font-semibold ${
@@ -272,30 +308,21 @@ export default function Dashboard() {
           } rounded-r-md`}
           onClick={() => setActiveTab("browser")}
         >
-          Web Browser Statistic
+          {content.dashboard.browserStatistic}
         </button>
       </div>
 
       <div className="flex flex-col lg:flex-row w-full max-w-5xl justify-between">
-        {/* Grafik alanı sol tarafta */}
         <div className="w-full lg:w-2/3">
           <div style={{ width: "500px", height: "500px", margin: "auto" }}>
-            {" "}
-            {/* Inline stil ile boyut belirliyoruz */}
-            <Doughnut
-              data={renderChartData()}
-              options={options}
-              ref={chartRef}
-            />
+            <Doughnut data={renderChartData()} options={options} ref={chartRef} />
           </div>
         </div>
 
-        {/* Veri listesi sağda */}
         <div className="w-full lg:w-1/3 pl-8 flex flex-col justify-center space-y-2 mt-4 lg:mt-0">
           <h2 className="text-lg font-semibold mb-4">{renderChartTitle()}</h2>
           <ul className="text-gray-700 font-semibold space-y-2">
-            {renderLabels()}{" "}
-            {/* Sağdaki veri listesini dinamik olarak render ediyoruz */}
+            {renderLabels()}
           </ul>
         </div>
       </div>

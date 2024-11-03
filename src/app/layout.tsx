@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 import localFont from "next/font/local";
 import "./globals.css";
@@ -25,7 +25,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div>{children}</div>
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

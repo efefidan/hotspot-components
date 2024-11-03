@@ -2,17 +2,22 @@ import { FiMoreVertical } from "react-icons/fi";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import { useState } from "react";
 import { FiShoppingBag, FiUsers, FiUserCheck, FiUser } from "react-icons/fi"; 
+import { useLanguage } from "@/contexts/LanguageContext"; // Dil hook'u
+import translations from "@/locales/translations"; // Çevirileri ekle
+
 
 const UserStats = () => {
+  const { language } = useLanguage();
+  const content = translations[language] || translations["en"]; // Dil seçimi
   const [selectedRange, setSelectedRange] = useState("Total");
 
   const stats = [
     {
       titles: {
-        Total: "Total Dealer",
-        Today: "Today Dealer",
-        "Last Week": "Last Week Dealer",
-        "Last Month": "Last Month Dealer",
+        Total: content.userStats.totalDealer,
+        Today: content.userStats.todayDealer,
+        "Last Week": content.userStats.lastWeekDealer,
+        "Last Month": content.userStats.lastMonthDealer,
       },
       ranges: {
         Total: { value: 182, change: "9.2%", increase: true },
@@ -24,10 +29,10 @@ const UserStats = () => {
     },
     {
       titles: {
-        Total: "Total Client",
-        Today: "Today Client",
-        "Last Week": "Last Week Client",
-        "Last Month": "Last Month Client",
+        Total: content.userStats.totalClient,
+        Today: content.userStats.todayClient,
+        "Last Week": content.userStats.lastWeekClient,
+        "Last Month": content.userStats.lastMonthClient,
       },
       ranges: {
         Total: { value: 606, change: "9.2%", increase: false },
@@ -38,14 +43,14 @@ const UserStats = () => {
       icon: <FiUsers className="text-2xl text-gray-500" />,
     },
     {
-      title: "Active Guest",
+      title: content.userStats.activeGuest,
       value: 8340,
       change: "9.2%",
       increase: true,
       icon: <FiUserCheck className="text-2xl text-gray-500" />,
     },
     {
-      title: "Guest All The Time",
+      title: content.userStats.guestAllTheTime,
       value: 108802,
       change: "60.4%",
       increase: true,
@@ -53,8 +58,12 @@ const UserStats = () => {
     },
   ];
 
-  const ranges = ["Total", "Today", "Last Week", "Last Month"];
-
+  const ranges = [
+    content.userStats.ranges.total,
+    content.userStats.ranges.today,
+    content.userStats.ranges.lastWeek,
+    content.userStats.ranges.lastMonth,
+  ];
   return (
     <div className="py-2">
       {/* Date Range Selection */}
@@ -68,18 +77,18 @@ const UserStats = () => {
                   ? "bg-gray-200 text-black font-semibold"
                   : "text-gray-500 hover:bg-gray-100"
               } rounded-lg border border-gray-300 transition-colors duration-200`}
-              onClick={() => setSelectedRange(range)} // Seçilen aralığa göre güncelle
+              onClick={() => setSelectedRange(range)}
             >
-              {range}
+              {content.userStats[range.toLowerCase().replace(/ /g, "")] || range}
             </button>
           ))}
         </div>
         {/* Date Range Picker */}
         <button
           className="text-gray-500 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 mt-2 sm:mt-0"
-          style={{ color: "#65789A" }} // Date Range button rengini değiştirdik
+          style={{ color: "#65789A" }}
         >
-          Date Range
+          {content.userStats.dateRange}
         </button>
       </div>
 

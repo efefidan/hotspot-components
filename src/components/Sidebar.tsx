@@ -2,6 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import { FiChevronDown, FiChevronRight, FiSearch } from "react-icons/fi";
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
+import translations from "@/locales/translations";
+
+
+
 
 // SidebarItem bileşeni. Açık olup olmadığını kontrol eden isActive prop'u alıyor.
 const SidebarItem = ({
@@ -48,6 +53,11 @@ const SidebarItem = ({
 
 const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
   // Sadece bir item'in açık kalması için activeIndex kullanıyoruz
+  const { language, changeLanguage } = useLanguage();
+  const content = translations[language] || translations["en"];
+  const handleLanguageChange = (lang: string) => {
+    changeLanguage(lang);
+  };
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isCompanyOpen, setIsCompanyOpen] = useState(false); // For company dropdown
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
@@ -131,7 +141,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
           {isOpen && (
             <div>
               <h2 className="font-semibold">MSE General</h2>
-              <p className="text-sm text-gray-400">Seçili Şube: Aktif</p>
+              <p className="text-sm text-gray-400">{content.sidebar.branchStatus}</p>
             </div>
           )}
         </div>
@@ -161,7 +171,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
         {isOpen && (
           <input
             className="ml-2 bg-white outline-none w-full text-gray-900"
-            placeholder="Search..."
+            placeholder={content.sidebar.searchPlaceholder}
           />
         )}
       </div>
@@ -177,61 +187,13 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
           top: "200px",
         }}
       >
-        <SidebarItem
-          title="Dashboard"
-          dropdown={false}
-          icon="/Vectordashboard.svg"
-          isActive={activeIndex === 0}
-          onClick={() => handleItemClick(0)}
-        />
-        <SidebarItem
-          title="Group Analysis"
-          dropdown={true}
-          items={["Analysis 1", "Analysis 2"]}
-          icon="/Vectorgroup.svg"
-          isActive={activeIndex === 1}
-          onClick={() => handleItemClick(1)}
-        />
-        <SidebarItem
-          title="Guest Relations"
-          dropdown={true}
-          items={["Guest 1", "Guest 2"]}
-          icon="/Vectorguest.svg"
-          isActive={activeIndex === 2}
-          onClick={() => handleItemClick(2)}
-        />
-        <SidebarItem
-          title="Settings"
-          dropdown={true}
-          items={["Profile", "Account Settings"]}
-          icon="/Vectorsettings.svg"
-          isActive={activeIndex === 3}
-          onClick={() => handleItemClick(3)}
-        />
-        <SidebarItem
-          title="Integrations"
-          dropdown={true}
-          items={["Integration 1", "Integration 2"]}
-          icon="/Vectorintegrations.svg"
-          isActive={activeIndex === 4}
-          onClick={() => handleItemClick(4)}
-        />
-        <SidebarItem
-          title="Log"
-          dropdown={true}
-          items={["Log 1", "Log 2"]}
-          icon="/Vectorlog.svg"
-          isActive={activeIndex === 5}
-          onClick={() => handleItemClick(5)}
-        />
-        <SidebarItem
-          title="Modules"
-          dropdown={true}
-          items={["Module 1", "Module 2"]}
-          icon="/Vectormodules.svg"
-          isActive={activeIndex === 6}
-          onClick={() => handleItemClick(6)}
-        />
+        <SidebarItem title={content.sidebar.dashboard} dropdown={false} icon="/Vectordashboard.svg" isActive={activeIndex === 0} onClick={() => handleItemClick(0)} />
+<SidebarItem title={content.sidebar.groupAnalysis} dropdown={true} items={["Analysis 1", "Analysis 2"]} icon="/Vectorgroup.svg" isActive={activeIndex === 1} onClick={() => handleItemClick(1)} />
+<SidebarItem title={content.sidebar.guestRelations} dropdown={true} items={["Guest 1", "Guest 2"]} icon="/Vectorguest.svg" isActive={activeIndex === 2} onClick={() => handleItemClick(2)} />
+<SidebarItem title={content.sidebar.settings} dropdown={true} items={["Profile", "Account Settings"]} icon="/Vectorsettings.svg" isActive={activeIndex === 3} onClick={() => handleItemClick(3)} />
+<SidebarItem title={content.sidebar.integrations} dropdown={true} items={["Integration 1", "Integration 2"]} icon="/Vectorintegrations.svg" isActive={activeIndex === 4} onClick={() => handleItemClick(4)} />
+<SidebarItem title={content.sidebar.log} dropdown={true} items={["Log 1", "Log 2"]} icon="/Vectorlog.svg" isActive={activeIndex === 5} onClick={() => handleItemClick(5)} />
+<SidebarItem title={content.sidebar.modules} dropdown={true} items={["Module 1", "Module 2"]} icon="/Vectormodules.svg" isActive={activeIndex === 6} onClick={() => handleItemClick(6)} />
       </ul>
 
       {/* Support, English, Version */}
@@ -245,36 +207,26 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
         }}
       >
         <div className="flex items-center space-x-2 text-gray-500 hover:text-black hover:bg-gray-200 hover:shadow-lg hover:opacity-100 transition-all duration-300 cursor-pointer border border-transparent rounded-lg p-2">
-          <img
-            src="/Vectorsupport.svg"
-            alt="Support Icon"
-            className="w-6 h-6"
-          />
-          {isOpen && <span>Support</span>}
-        </div>
+  <img src="/Vectorsupport.svg" alt="Support Icon" className="w-6 h-6" />
+  {isOpen && <span>{content.sidebar.support}</span>}
+</div>
 
         {/* Language Dropdown */}
-      <div
-        className="relative flex items-center space-x-2 text-gray-500 hover:text-black hover:bg-gray-200 hover:shadow-lg hover:opacity-100 transition-all duration-300 cursor-pointer border border-transparent rounded-lg p-2"
-        onClick={toggleLanguageDropdown}
-      >
-        <img src="/Vectorenglish.svg" alt="Language Icon" className="w-6 h-6" />
-        {isOpen && <span>English</span>}
-      </div>
+        <div className="relative flex items-center space-x-2 text-gray-500 hover:text-black hover:bg-gray-200 hover:shadow-lg hover:opacity-100 transition-all duration-300 cursor-pointer border border-transparent rounded-lg p-2" onClick={toggleLanguageDropdown}>
+  <img src="/Vectorenglish.svg" alt="Language Icon" className="w-6 h-6" />
+  {isOpen && <span>{content.sidebar.language}</span>}
+</div>
 
       {/* Dropdown Content */}
       {isLanguageDropdownOpen && (
-        <div
-          className="absolute top-0 left-48 bg-white border border-gray-300 shadow-lg rounded-lg p-4"
-          ref={languageDropdownRef} // Reference for the dropdown
-        >
-          <ul className="text-gray-700">
-            <li className="hover:bg-gray-100 p-2 rounded-lg cursor-pointer">English</li>
-            <li className="hover:bg-gray-100 p-2 rounded-lg cursor-pointer">Turkish</li>
-            <li className="hover:bg-gray-100 p-2 rounded-lg cursor-pointer">German</li>
-          </ul>
-        </div>
-      )}
+  <div className="absolute top-0 left-48 bg-white border border-gray-300 shadow-lg rounded-lg p-4" ref={languageDropdownRef}>
+    <ul className="text-gray-700">
+      <li className="hover:bg-gray-100 p-2 rounded-lg cursor-pointer" onClick={() => handleLanguageChange("en")}>{content.sidebar.english}</li>
+      <li className="hover:bg-gray-100 p-2 rounded-lg cursor-pointer" onClick={() => handleLanguageChange("tr")}>{content.sidebar.turkish}</li>
+      <li className="hover:bg-gray-100 p-2 rounded-lg cursor-pointer" onClick={() => handleLanguageChange("de")}>{content.sidebar.german}</li>
+    </ul>
+  </div>
+)}
 
         <div className="flex items-center space-x-2 text-gray-300">
           <img

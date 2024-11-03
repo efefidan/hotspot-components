@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLanguage } from "@/contexts/LanguageContext"; // Dil hook'u
+import translations from "@/locales/translations"; // Çevirileri ekle
 
 const users = [
   { name: 'Robert Fox', daysLeft: 2, image: '/path/to/image1.jpg', color: 'bg-red-500' },
@@ -12,9 +14,12 @@ const users = [
 ];
 
 const LicenseExpireList = () => {
+  const { language } = useLanguage();
+  const content = translations[language] || translations["en"];
+
   return (
     <div className="w-full lg:w-7/8 p-4 bg-white rounded-lg shadow-md mt-4 lg:mt-0">
-      <h2 className="w-full text-lg font-semibold mb-4">License Expire List</h2>
+      <h2 className="w-full text-lg font-semibold mb-4">{content.licenseExpireList.title}</h2>
       <ul className="space-y-4">
         {users.map((user, index) => (
           <li key={index} className="flex justify-between items-center">
@@ -26,7 +31,9 @@ const LicenseExpireList = () => {
               />
               <div>
                 <p className="font-semibold">{user.name}</p>
-                <p className="text-gray-500 text-sm">{user.daysLeft} Days Left</p>
+                <p className="text-gray-500 text-sm">
+                  {user.daysLeft} {content.licenseExpireList.daysLeft}
+                </p>
               </div>
             </div>
             <span className={`w-5 h-3 rounded-full ${user.color}`} />
