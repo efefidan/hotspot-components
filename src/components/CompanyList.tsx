@@ -10,6 +10,8 @@ import {
   ReloadOutlined,
 } from "@ant-design/icons";
 import CompanyRegister from "./CompanyRegister";
+import { useRouter } from "next/navigation"; // Yeni import
+
 
 interface Company {
   id: number;
@@ -80,6 +82,12 @@ const data: Company[] = [
 ];
 
 const CompanyList: React.FC = () => {
+  const router = useRouter(); // Router'i burada kullanın
+  
+  const showDetails = (id: number) => {
+    router.push(`/company/${id}`);
+  };
+  
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
   const [isCompanyRegisterOpen, setIsCompanyRegisterOpen] = useState(false);
@@ -151,23 +159,17 @@ const CompanyList: React.FC = () => {
         <div style={{ display: "flex", gap: "8px" }}>
           <Button
             icon={<DesktopOutlined />}
-            onClick={() =>
-              showModal(<p>Firma Listesini Göster: {record.name}</p>)
-            }
+            onClick={() => showModal(<p>Firma Listesini Göster: {record.name}</p>)}
             style={{ backgroundColor: "#38B2AC", color: "white" }}
           />
           <Button
             icon={<EyeOutlined />}
-            onClick={() =>
-              showModal(<p>Firma Detaylarını Görüntüle: {record.name}</p>)
-            }
+            onClick={() => showDetails(record.id)} // Detay sayfasına yönlendirme
             style={{ backgroundColor: "#FF9900", color: "white" }}
           />
           <Button
             icon={<EditOutlined />}
-            onClick={() =>
-              showModal(<p>Firma Listesini Düzenle: {record.name}</p>)
-            }
+            onClick={() => showModal(<p>Firma Listesini Düzenle: {record.name}</p>)}
             style={{ backgroundColor: "#FFA500", color: "white" }}
           />
           <Button
@@ -188,41 +190,19 @@ const CompanyList: React.FC = () => {
         </Col>
         <Col>
           <div style={{ display: "flex", gap: "8px" }}>
-            <Button
-              icon={<SearchOutlined />}
-              style={{ backgroundColor: "#FFA500", color: "white" }}
-            />
-            <Button
-              icon={<ReloadOutlined />}
-              style={{ backgroundColor: "#38B2AC", color: "white" }}
-            />
-            <Button
-              icon={<PlusOutlined />}
-              style={{ backgroundColor: "#39C5BB", color: "white" }}
-              onClick={openCompanyRegister}
-            >
+            <Button icon={<SearchOutlined />} style={{ backgroundColor: "#FFA500", color: "white" }} />
+            <Button icon={<ReloadOutlined />} style={{ backgroundColor: "#38B2AC", color: "white" }} />
+            <Button icon={<PlusOutlined />} style={{ backgroundColor: "#39C5BB", color: "white" }} onClick={openCompanyRegister}>
               Ekle
             </Button>
           </div>
         </Col>
       </Row>
 
-      <Table
-  dataSource={data}
-  columns={columns}
-  rowKey="id"
-  pagination={{ pageSize: 6 }} // Sayfalama ayarları
-/>
-      <Modal
-        title="Firma Bilgileri"
-        visible={isCompanyRegisterOpen}
-        onCancel={closeCompanyRegister}
-        footer={null}
-      >
-        <CompanyRegister
-          onSave={(data) => console.log("Firma Bilgileri:", data)}
-          onClose={closeCompanyRegister}
-        />
+      <Table dataSource={data} columns={columns} rowKey="id" pagination={{ pageSize: 6 }} />
+
+      <Modal title="Firma Bilgileri" visible={isCompanyRegisterOpen} onCancel={closeCompanyRegister} footer={null}>
+        <CompanyRegister onSave={(data) => console.log("Firma Bilgileri:", data)} onClose={closeCompanyRegister} />
       </Modal>
     </Card>
   );
