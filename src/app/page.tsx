@@ -13,14 +13,20 @@ import Header from "../components/Header";
 import HotelStats from "@/components/HotelStats";
 import UserStats2 from "@/components/UserStats2";
 import { useLanguage } from "@/contexts/LanguageContext";
-
+import CompanyRegister from "@/components/CompanyRegister";
+import CompanyList from "@/components/CompanyList";
 
 const HomePage = () => {
   const [memoryUsage, setMemoryUsage] = useState(65);
   const [diskUsage, setDiskUsage] = useState(75);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { language } = useLanguage();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+  const handleSave = (data: any) => {
+    console.log("Firma Bilgileri:", data);
+    // Burada veriyi kaydetmek için bir API çağrısı yapılabilir.
+  };
 
   // Örnek veri setleri
   const userStatsData = [
@@ -34,12 +40,20 @@ const HomePage = () => {
   ];
 
   const connectionDetailsData = [
-    { room: "1010", ipAddress: "170.20.12.189", macAddress: "AC:92:32:C1:18:04" },
+    {
+      room: "1010",
+      ipAddress: "170.20.12.189",
+      macAddress: "AC:92:32:C1:18:04",
+    },
     // Diğer veriler...
   ];
 
   const currentLogsData = [
-    { hotelName: "Akra Hotel", logName: "All Customer Logs", date: "27.09.2024 - 10:30" },
+    {
+      hotelName: "Akra Hotel",
+      logName: "All Customer Logs",
+      date: "27.09.2024 - 10:30",
+    },
     // Diğer veriler...
   ];
 
@@ -85,8 +99,8 @@ const HomePage = () => {
           <div className="flex flex-wrap space-x-4">
             <GuestTrafficChart />
           </div>
-          <UserStats2 />
         </div>
+        <CompanyList/>
       </div>
     </div>
   );
