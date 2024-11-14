@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { Button } from 'antd';
 
-interface CompanyRegisterProps {
+interface UserRegisterProps {
   onClose: () => void;
   onSave: (data: any) => void;
 }
 
-const CompanyRegister: React.FC<CompanyRegisterProps> = ({ onClose, onSave }) => {
+const UserRegister: React.FC<UserRegisterProps> = ({ onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    creationDate: '',
+    firstName: '',
+    lastName: '',
     branch: '',
+    email: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,51 +30,41 @@ const CompanyRegister: React.FC<CompanyRegisterProps> = ({ onClose, onSave }) =>
   return (
     <form>
       <div className="mb-4">
-        <label className="block text-sm font-medium">Firma Adı</label>
+        <label className="block text-sm font-medium">Ad</label>
         <input
           type="text"
-          name="name"
-          value={formData.name}
+          name="firstName"
+          value={formData.firstName}
           onChange={handleChange}
           className="w-full p-2 border rounded"
         />
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium">E Mail</label>
+        <label className="block text-sm font-medium">Soyad</label>
         <input
-          type="email"
-          name="email"
-          value={formData.email}
+          type="text"
+          name="lastName"
+          value={formData.lastName}
           onChange={handleChange}
           className="w-full p-2 border rounded"
         />
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium">Telefon</label>
-        <input
-          type="tel"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Kayıt Tarihi</label>
-        <input
-          type="date"
-          name="creationDate"
-          value={formData.creationDate}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Şube</label>
+        <label className="block text-sm font-medium">Şubeler</label>
         <input
           type="text"
           name="branch"
           value={formData.branch}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium">Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
           onChange={handleChange}
           className="w-full p-2 border rounded"
         />
@@ -92,4 +81,4 @@ const CompanyRegister: React.FC<CompanyRegisterProps> = ({ onClose, onSave }) =>
   );
 };
 
-export default CompanyRegister;
+export default UserRegister;

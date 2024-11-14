@@ -10,8 +10,7 @@ import {
   ReloadOutlined,
 } from "@ant-design/icons";
 import CompanyRegister from "./CompanyRegister";
-import { useRouter } from "next/navigation"; // Yeni import
-
+import { useRouter } from "next/navigation"; 
 
 interface Company {
   id: number;
@@ -22,85 +21,68 @@ interface Company {
   branch: string;
 }
 
-const data: Company[] = [
-  {
-    id: 43,
-    name: "İbrahim EV",
-    email: "istanbul@mseteknoloji.com",
-    phone: "65",
-    creationDate: "24.05.2023",
-    branch: "Erzurum",
-  },
-  {
-    id: 44,
-    name: "Ayşe Yılmaz",
-    email: "ayse.yilmaz@ornekfirma.com",
-    phone: "123456789",
-    creationDate: "15.06.2023",
-    branch: "İstanbul",
-  },
-  {
-    id: 45,
-    name: "Mehmet Kaya",
-    email: "mehmet.kaya@isnet.com",
-    phone: "987654321",
-    creationDate: "01.03.2023",
-    branch: "Ankara",
-  },
-  {
-    id: 46,
-    name: "Zeynep Karaca",
-    email: "zeynep.karaca@karacagroup.com",
-    phone: "555666777",
-    creationDate: "10.09.2022",
-    branch: "İzmir",
-  },
-  {
-    id: 47,
-    name: "Ahmet Çelik",
-    email: "ahmet.celik@celikholding.com",
-    phone: "445566778",
-    creationDate: "20.11.2021",
-    branch: "Bursa",
-  },
-  {
-    id: 48,
-    name: "Fatma Demir",
-    email: "fatma.demir@demirinsaat.com",
-    phone: "223344556",
-    creationDate: "05.02.2023",
-    branch: "Antalya",
-  },
-  {
-    id: 49,
-    name: "Ahmet Laz",
-    email: "ahmetlaz@karacagroup.com",
-    phone: "123456",
-    creationDate: "11.09.2042",
-    branch: "İzmir",
-  },
-];
-
 const CompanyList: React.FC = () => {
-  const router = useRouter(); // Router'i burada kullanın
-  
-  const showDetails = (id: number) => {
-    router.push(`/company/${id}`);
-  };
-  
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+  const router = useRouter();
+  const [companies, setCompanies] = useState<Company[]>([
+    {
+      id: 43,
+      name: "İbrahim EV",
+      email: "istanbul@mseteknoloji.com",
+      phone: "65",
+      creationDate: "24.05.2023",
+      branch: "Erzurum",
+    },
+    {
+      id: 44,
+      name: "Ayşe Yılmaz",
+      email: "ayse.yilmaz@ornekfirma.com",
+      phone: "123456789",
+      creationDate: "15.06.2023",
+      branch: "İstanbul",
+    },
+    {
+      id: 45,
+      name: "Mehmet Kaya",
+      email: "mehmet.kaya@isnet.com",
+      phone: "987654321",
+      creationDate: "01.03.2023",
+      branch: "Ankara",
+    },
+    {
+      id: 46,
+      name: "Zeynep Karaca",
+      email: "zeynep.karaca@karacagroup.com",
+      phone: "555666777",
+      creationDate: "10.09.2022",
+      branch: "İzmir",
+    },
+    {
+      id: 47,
+      name: "Ahmet Çelik",
+      email: "ahmet.celik@celikholding.com",
+      phone: "445566778",
+      creationDate: "20.11.2021",
+      branch: "Bursa",
+    },
+    {
+      id: 48,
+      name: "Fatma Demir",
+      email: "fatma.demir@demirinsaat.com",
+      phone: "223344556",
+      creationDate: "05.02.2023",
+      branch: "Antalya",
+    },
+    {
+      id: 49,
+      name: "Ahmet Laz",
+      email: "ahmetlaz@karacagroup.com",
+      phone: "123456",
+      creationDate: "11.09.2042",
+      branch: "İzmir",
+    },
+  ]);
+
   const [isCompanyRegisterOpen, setIsCompanyRegisterOpen] = useState(false);
-
-  const showModal = (content: JSX.Element) => {
-    setModalContent(content);
-    setIsModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setIsModalVisible(false);
-    setModalContent(null);
-  };
 
   const openCompanyRegister = () => {
     setIsCompanyRegisterOpen(true);
@@ -108,6 +90,19 @@ const CompanyList: React.FC = () => {
 
   const closeCompanyRegister = () => {
     setIsCompanyRegisterOpen(false);
+  };
+
+  const handleSaveCompany = (companyData: Omit<Company, "id">) => {
+    const newCompany = {
+      ...companyData,
+      id: companies.length ? companies[companies.length - 1].id + 1 : 1, // Yeni ID'yi belirle
+    };
+    setCompanies([...companies, newCompany]); // Yeni firmayı listeye ekle
+    closeCompanyRegister();
+  };
+
+  const showDetails = (id: number) => {
+    router.push(`/company/${id}`);
   };
 
   const columns = [
@@ -136,16 +131,11 @@ const CompanyList: React.FC = () => {
       sorter: (a: Company, b: Company) => a.phone.localeCompare(b.phone),
     },
     {
-        title: "Oluşturma Tarihi",
-        dataIndex: "creationDate",
-        key: "creationDate",
-        sorter: (a: Company, b: Company) => {
-          const dateA = new Date(a.creationDate.split('.').reverse().join('-')).getTime();
-          const dateB = new Date(b.creationDate.split('.').reverse().join('-')).getTime();
-          return dateA - dateB;
-        },
-      },
-      
+      title: "Oluşturma Tarihi",
+      dataIndex: "creationDate",
+      key: "creationDate",
+      sorter: (a: Company, b: Company) => new Date(a.creationDate).getTime() - new Date(b.creationDate).getTime(),
+    },
     {
       title: "Şube",
       dataIndex: "branch",
@@ -156,25 +146,20 @@ const CompanyList: React.FC = () => {
       title: "İşlemler",
       key: "actions",
       render: (_: any, record: Company) => (
-        <div style={{ display: "flex", gap: "8px" }}>
-          <Button
-            icon={<DesktopOutlined />}
-            onClick={() => showModal(<p>Firma Listesini Göster: {record.name}</p>)}
-            style={{ backgroundColor: "#38B2AC", color: "white" }}
-          />
+        <div style={{ display: "flex" }}>
+                              <Button icon={<DesktopOutlined />} style={{ backgroundColor: "#38B2AC", color: "white" }} />
+
           <Button
             icon={<EyeOutlined />}
-            onClick={() => showDetails(record.id)} // Detay sayfasına yönlendirme
+            onClick={() => showDetails(record.id)}
             style={{ backgroundColor: "#FF9900", color: "white" }}
           />
           <Button
             icon={<EditOutlined />}
-            onClick={() => showModal(<p>Firma Listesini Düzenle: {record.name}</p>)}
             style={{ backgroundColor: "#FFA500", color: "white" }}
           />
           <Button
             icon={<DeleteOutlined />}
-            onClick={() => showModal(<p>Firma Sil: {record.name}</p>)}
             style={{ backgroundColor: "#FF4D4F", color: "white" }}
           />
         </div>
@@ -199,10 +184,10 @@ const CompanyList: React.FC = () => {
         </Col>
       </Row>
 
-      <Table dataSource={data} columns={columns} rowKey="id" pagination={{ pageSize: 6 }} />
+      <Table dataSource={companies} columns={columns} rowKey="id" pagination={{ pageSize: 6 }} />
 
       <Modal title="Firma Bilgileri" visible={isCompanyRegisterOpen} onCancel={closeCompanyRegister} footer={null}>
-        <CompanyRegister onSave={(data) => console.log("Firma Bilgileri:", data)} onClose={closeCompanyRegister} />
+        <CompanyRegister onSave={handleSaveCompany} onClose={closeCompanyRegister} />
       </Modal>
     </Card>
   );
